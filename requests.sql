@@ -1,6 +1,6 @@
 CREATE TABLE users
 (
-    id      INTEGER PRIMARY KEY AUTOINCREMENT,
+    id      INTEGER PRIMARY KEY,
     surname TEXT NOT NULL,
     name    TEXT NOT NULL,
     email   TEXT NOT NULL UNIQUE CHECK (email like '%@%')
@@ -22,15 +22,16 @@ CREATE TABLE letters
     FOREIGN KEY (parent_letter_id) REFERENCES letters (letter_id)
 );
 
+
 ----------------------- TEST_DATA --------------------
 
-INSERT INTO users (surname, name, email)
-VALUES ('Скворцов', 'Александр', 'skvorec@rmail.ru'),
-       ('Голубева', 'Нина', 'golubeva@rmail.ru'),
-       ('Кукушкин', 'Петр', 'kukushka@rmail.ru'),
-       ('Орлова', 'Надежда', 'orlova@rmail.ru'),
-       ('Воробьев', 'Олег', 'vorobey@rmail.ru'),
-       ('Ястребова', 'Дарья', 'yastrebova@rmail.ru');
+INSERT INTO users (id, surname, name, email)
+VALUES (1, 'Скворцов', 'Александр', 'skvorec@rmail.ru'),
+       (2, 'Голубева', 'Нина', 'golubeva@rmail.ru'),
+       (3, 'Кукушкин', 'Петр', 'kukushka@rmail.ru'),
+       (4, 'Орлова', 'Надежда', 'orlova@rmail.ru'),
+       (5, 'Воробьев', 'Олег', 'vorobey@rmail.ru'),
+       (6, 'Ястребова', 'Дарья', 'yastrebova@rmail.ru');
 
 
 
@@ -74,7 +75,7 @@ SELECT l.letter_date      Date, --просматривать входящие н
        l.parent_letter_id Previous_letter
 FROM letters l,
      users u
-WHERE l.recipient_id = '1'
+WHERE l.recipient_id = 1
   AND l.sender_id = u.id
   AND l.reading_status = 0
   AND l.draft = 0
@@ -90,7 +91,7 @@ SELECT l.letter_date      Date, -- просматривать входящие �
        l.parent_letter_id Previous_letter
 FROM letters l,
      users u
-WHERE l.recipient_id = '3'
+WHERE l.recipient_id = 3
   AND l.sender_id = u.id
   AND l.draft = 0
 ORDER BY l.letter_id DESC
@@ -104,7 +105,7 @@ SELECT l.letter_date      Date, -- просматривать исходящие
        l.parent_letter_id Previous_letter
 FROM letters l,
      users u
-WHERE l.sender_id = '1'
+WHERE l.sender_id = 1
   AND l.recipient_id = u.id
   AND l.draft = 0
 ORDER BY l.letter_id DESC
@@ -119,7 +120,7 @@ SELECT l.letter_date      Date, -- просматривать черновики
        l.parent_letter_id Previous_letter
 FROM letters l
          LEFT JOIN users u on l.recipient_id = u.id
-WHERE l.sender_id = '4'
+WHERE l.sender_id = 4
   AND l.draft = 1
 ORDER BY l.letter_id DESC
 LIMIT 50;
