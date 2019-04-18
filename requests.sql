@@ -1,6 +1,6 @@
 CREATE TABLE users
 (
-    user_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     surname TEXT NOT NULL,
     name    TEXT NOT NULL,
     email   TEXT NOT NULL UNIQUE CHECK (email like '%@%')
@@ -17,8 +17,8 @@ CREATE TABLE letters
     reading_status TEXT CHECK ( reading_status IN ('+', '-')) DEFAULT '+',  --статус должен меняться в зависимости от того, кто просматривает
     draft          TEXT CHECK ( reading_status IN ('+', '-')),              --черновик
     parent_letter  INTEGER                                    DEFAULT NULL, --id письма, на которо отвечает текущее письмо
-    FOREIGN KEY (sender_id) REFERENCES users (user_id),
-    FOREIGN KEY (recipient_id) REFERENCES users (user_id),
+    FOREIGN KEY (sender_id) REFERENCES users (id),
+    FOREIGN KEY (recipient_id) REFERENCES users (id),
     FOREIGN KEY (parent_letter) REFERENCES letters (letter_id)
 );
 
@@ -75,7 +75,7 @@ SELECT l.letter_date    Date, --просматривать входящие не
 FROM letters l,
      users u
 WHERE l.recipient_id = '1'
-  AND l.sender_id = user_id
+  AND l.sender_id = u.id
   AND l.reading_status = '-'
   AND l.draft = '-'
 ORDER BY l.letter_id DESC;
@@ -91,7 +91,7 @@ SELECT l.letter_date    Date, -- просматривать входящие п�
 FROM letters l,
      users u
 WHERE l.recipient_id = '3'
-  AND l.sender_id = user_id
+  AND l.sender_id = u.id
   AND l.draft = '-'
 ORDER BY l.letter_id DESC
 LIMIT 50;
@@ -105,7 +105,7 @@ SELECT l.letter_date   Date, -- просматривать исходящие п
 FROM letters l,
      users u
 WHERE l.sender_id = '1'
-  AND l.recipient_id = user_id
+  AND l.recipient_id = u.id
   AND l.draft = '-'
 ORDER BY l.letter_id DESC
 LIMIT 50;
@@ -118,7 +118,7 @@ SELECT l.letter_date   Date, -- просматривать черновики
        l.letter_body   Text,
        l.parent_letter Previous_letter
 FROM letters l
-         LEFT JOIN users u on l.recipient_id = u.user_id
+         LEFT JOIN users u on l.recipient_id = u.id
 WHERE l.sender_id = '4'
   AND l.draft = '+'
 ORDER BY l.letter_id DESC
