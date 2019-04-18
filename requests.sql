@@ -75,7 +75,7 @@ SELECT l.letter_date      Date, --просматривать входящие н
        l.parent_letter_id Previous_letter
 FROM letters l,
      users u
-WHERE l.recipient_id = 1
+WHERE l.recipient_id = :id
   AND l.sender_id = u.id
   AND l.reading_status = 0
   AND l.draft = 0
@@ -91,7 +91,7 @@ SELECT l.letter_date      Date, -- просматривать входящие �
        l.parent_letter_id Previous_letter
 FROM letters l,
      users u
-WHERE l.recipient_id = 3
+WHERE l.recipient_id = :id
   AND l.sender_id = u.id
   AND l.draft = 0
 ORDER BY l.letter_id DESC
@@ -105,7 +105,7 @@ SELECT l.letter_date      Date, -- просматривать исходящие
        l.parent_letter_id Previous_letter
 FROM letters l,
      users u
-WHERE l.sender_id = 1
+WHERE l.sender_id = :id
   AND l.recipient_id = u.id
   AND l.draft = 0
 ORDER BY l.letter_id DESC
@@ -120,7 +120,7 @@ SELECT l.letter_date      Date, -- просматривать черновики
        l.parent_letter_id Previous_letter
 FROM letters l
          LEFT JOIN users u on l.recipient_id = u.id
-WHERE l.sender_id = 4
+WHERE l.sender_id = :id
   AND l.draft = 1
 ORDER BY l.letter_id DESC
 LIMIT 50;
